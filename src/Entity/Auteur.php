@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\AuteurRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AuteurRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AuteurRepository::class)
+ * @ApiResource()
  */
 class Auteur
 {
@@ -21,19 +24,22 @@ class Auteur
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"listGenreFull"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"listGenreFull"})
      */
     private $prenom;
 
     /**
      * @ORM\ManyToOne(targetEntity=Nationalite::class, inversedBy="auteurs")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"listGenreFull"})
      */
-    private $nationalite;
+    private $relation;
 
     /**
      * @ORM\OneToMany(targetEntity=Livre::class, mappedBy="auteur")
@@ -74,14 +80,14 @@ class Auteur
         return $this;
     }
 
-    public function getNationalite(): ?Nationalite
+    public function getRelation(): ?Nationalite
     {
-        return $this->nationalite;
+        return $this->relation;
     }
 
-    public function setNationalite(?Nationalite $nationalite): self
+    public function setRelation(?Nationalite $relation): self
     {
-        $this->nationalite = $nationalite;
+        $this->relation = $relation;
 
         return $this;
     }
