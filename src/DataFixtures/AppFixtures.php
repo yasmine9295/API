@@ -56,19 +56,31 @@ class AppFixtures extends Fixture
                 $this->addReference("adherent".$i,$adherent);
                 $this->manager->persist($adherent);
         }
-        $adherent=new Adherent();
-            $adherent ->setNom("Rolland")
-                  ->setPrenom("Stéphane")
-                  ->setMail("admin@gmail.com")
-                  ->setPassword($this->passwordEncoder->encodePassword($adherent, "Rolland"));
-
-            $this->manager->persist($adherent);
+        $adherentAdmin=new Adherent();
+        $rolesAdmin[] = ADHERENT::ROLE_ADMIN;
+        $adherentAdmin ->setNom("Rolland")
+              ->setPrenom("Stéphane")
+              ->setMail("admin@gmail.com")
+              ->setPassword($this->passwordEncoder->encodePassword($adherent, $adherent->getNom()))
+              ->setRoles($rolesAdmin);
+    
+        $this->manager->persist($adherentAdmin);
+    
+        $adherentManager=new Adherent();
+        $rolesManager[] = ADHERENT::ROLE_MANAGER;
+        $adherentManager ->setNom("Durand")
+              ->setPrenom("Sophie")
+              ->setMail("manager@gmail.com")
+              ->setPassword($this->passwordEncoder->encodePassword($adherent, $adherent->getNom()))
+              ->setRoles($rolesManager);
+    
+        $this->manager->persist($adherentManager);
 
         $this->manager->flush();
 
     }
 
-
+   
     /**
      * création des prets
      *
