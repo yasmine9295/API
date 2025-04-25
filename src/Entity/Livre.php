@@ -23,22 +23,14 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
  *              }
  *  },
  *         collectionOperations={
- *              "get_coll_role_adherent"={
+ *              "get"={
  *                  "method"="GET",
- *                  "path"="/adherent/livres",
- *                  "security"="is_granted('ROLE_ADHERENT')",
- *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource",
+ *                  "path"="/livres",
  *                  "normalization_context"={
  *                          "groups"={"get_role_adherent"}
  *                 }
  *          },
  * 
- *          "get_coll_role_manager"={
- *                  "method"="GET",
- *                  "path"="/manager/livres",
- *                  "security"="is_granted('ROLE_MANAGER')",
- *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource" 
- *          },
  *          "post"={
  *              "method"= "POST",
  *                  "security"="is_granted('ROLE_MANAGER')",
@@ -48,42 +40,27 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
  * 
  *     },
  *        itemOperations={
- *           "get_item_role_adherent"={
+ *           "get"={
  *                  "method"="GET",
- *                  "path"="/adherent/livres/{id}",
- *                  "security"="is_granted('ROLE_ADHERENT')",
- *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource",
+ *                  "path"="/livres/{id}",
  *                  "normalization_context"={
  *                          "groups"={"get_role_adherent"}
  *                 }
  *          },
  * 
- *          "get_item_role_manager"={
- *                  "method"="GET",
- *                  "path"="/manager/livres/{id}",
- *                  "security"="is_granted('ROLE_MANAGER')",
- *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource" 
- *          },
- * 
- *           "put_item_role_manager"={
+ *           "put"={
  *                  "method"="PUT",
- *                  "path"="/manager/livres/{id}",
+ *                  "path"="/livres/{id}",
  *                  "security"="is_granted('ROLE_MANAGER')",
  *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource",
  *                  "denormalization_context"={
  *                          "groups"={"put_manager"}
  *                 }
  *          },
- *          "put_item_role_admin"={
- *                  "method"="PUT",
- *                  "path"="/admin/livres/{id}",
- *                  "security"="is_granted('ROLE_ADMIN')",
- *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource",
- *          },
  * 
  *           "delete"={
  *                  "method"="DELETE",
- *                  "path"="/admin/livres/{id}",
+ *                  "path"="/livres/{id}",
  *                  "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Vous n'avez pas les droits d'accéder a cette ressource",
  *          }
@@ -154,6 +131,7 @@ class Livre
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"get_role_adherent" , "put_prix"})
      */
     private $prix;
 
@@ -192,6 +170,7 @@ class Livre
 
     /**
      * @ORM\OneToMany(targetEntity=Pret::class, mappedBy="livre")
+     * @Groups({"get_role_adherent"})
      */
     private $prets;
 
