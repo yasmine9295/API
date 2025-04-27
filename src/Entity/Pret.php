@@ -8,7 +8,18 @@ use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=PretRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *          itemOperations={
+ *              "get"={
+ *                  "method"="GET",
+ *                  "path"="/prets/{id}",
+ *                  "security"="(is_granted('ROLE_ADHERENT') and object.getAdherent() == user) or is_granted('ROLE_MANAGER')",
+ *                  "security_message" = "Vous ne pouvez avoir accès qu'à vos propres prêts."
+ * 
+ *              }
+ * 
+ * 
+ * })
  */
 class Pret
 {
@@ -46,6 +57,14 @@ class Pret
      */
     private $adherent;
 
+    public function __construct()
+    {
+        $this->datePret= new \DateTime();
+        $dateRetourPrevue=date('Y-m-d H:m:n',strtotime('15 days', $this->getDatePret()->getTimestamp()));
+        $dateRetourPrevue=\DateTime::createFromFormat('Y-m-d H:m:n',$dateRetourPrevue);
+        $this->dateRetourPrevue=$dateRetourPrevue;
+        $this->dateRetourRelle=null;
+    }
     public function getId(): ?int
     {
         return $this->id;
